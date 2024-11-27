@@ -18,6 +18,15 @@
         border-radius: 10px;
         padding: 10px;
     }
+    .container-wrapper {
+        display: flex; /* Utilisation de Flexbox */
+        flex-direction: column; /* Aligner les éléments en colonne */
+        align-items: center; /* Centrer les éléments horizontalement */
+        gap: 20px; /* Ajouter de l'espace entre les conteneurs */
+        margin-top: 20px; /* Un peu de marge en haut pour que ce soit plus joli */
+        width: 100%; /* Prendre toute la largeur disponible */
+        max-width: 100%; /* S'assurer qu'il n'y a pas de limite supplémentaire */
+    }
     .form-control{
         margin-bottom: 20px;
     }
@@ -33,6 +42,9 @@
         align-items: center; /* Centre verticalement */
         height: 100vh; /* La hauteur de la colonne prend toute la hauteur de la fenêtre */
     }
+    .texte_important{
+        text-emphasis-color: red;
+    }
     
     h1 {
         text-align: center;
@@ -43,24 +55,29 @@
   <body>
     <form>
         <div class="col-4" id="col_select_form">
-            <div class="container">
-                
-            </div>
-            <div class="container">
-                <form id="form_select_login">
-                    <h1>Select User</h1>
-                    <div class="form_case">
-                        <label for="select_username" class="form-label">Username</label>
-                        <input id="select_username" type="text" class="form-control" placeholder=""></input>
+            <div class="container-wrapper">
+                <div class="container" id="container_select_introduction">
+                    <h1> Introduction</h1>
+                    <div class="text-start text-wrap">
+                        Ce document présente le sujet de TP réalisé par Nicolas Bontemps et Alexis Kluck dans le cadre du cours de 'Déploiement d'un Système d'Information' dispensé par M. Hanquiez. Le code a été développé le XX/XX/XX. Pour accéder au code, il est nécessaire de se connecter avec un identifiant utilisateur. D'autres utilisateurs pourront être ajoutés ultérieurement. Le programme inclut également un système de gestion des niveaux d'importance. Pour accéder à toutes les fonctionnalités, il est nécessaire de se connecter avec un compte 'dirigeant'.
                     </div>
-                    <div class="form_case">
-                        <label for="select_password" class="form-label">Password</label>
-                        <input id="select_password" type="text" class="form-control" placeholder=""></input>
-                    </div>
-                    <div>
-                        <button id="btn_select_login" type="button" class="form-control">Login</button>
-                    </div>
-                </form>
+                </div>
+                <div class="container" id="container_select_form">
+                    <form id="form_select_login">
+                        <h1>Select User</h1>
+                        <div class="form_case">
+                            <label for="select_username" class="form-label">Username</label>
+                            <input id="select_username" type="text" class="form-control" placeholder=""></input>
+                        </div>
+                        <div class="form_case">
+                            <label for="select_password" class="form-label">Password</label>
+                            <input id="select_password" type="text" class="form-control" placeholder=""></input>
+                        </div>
+                        <div>
+                            <button id="btn_select_login" type="button" class="form-control">Login</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="col-8">
