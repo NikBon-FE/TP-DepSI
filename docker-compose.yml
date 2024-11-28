@@ -1,22 +1,40 @@
-frontend :
-	image: nginx:latest 
-	ports: "8080:80" 
-	volumes :
-		./frontend:/usr/share/nginx/html
- 		./logs/nginx:/var/log/nginx
- 		networks :hackathon_network
-backend (Service Backend) :
-	build: ./backend
- 	ports: "5000:5000"
- 	depends_on: db
-	volumes :./backend:/app
-	networks :hackathon_network
-db:
-	image: mariadb
-	environment :
-		MYSQL_ROOT_PASSWORD: root 
-		MYSQL_DATABASE: hackathon
-	ports: "3306:3306"
-	volumes :db_data:/var/lib/MySQL
-	volumes :db_data
- 	networks :hackathon_network
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - hackathon_network
+
+  backend:
+    build: ./backend #Pas d'image standard, car Dockerfile (on la fait nous même)
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    networks:
+      - hackathon_network
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hackathon
+    ports:
+      - "3307:3307"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - hackathon_network
+
+volumes:
+  db_data:
+
+networks:
+  hackathon_network:
