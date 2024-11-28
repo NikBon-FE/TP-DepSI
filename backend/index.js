@@ -15,14 +15,13 @@ __copyright__ = "Unilasalle Amiens"
 __date__ = "2024-??-??"
 __version__= "1.0.0"
 
-/**
 
 const express = require('express');
 const mariadb = require('mariadb');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 5001;
 
 // Utiliser le middleware CORS
 app.use(cors());
@@ -52,7 +51,9 @@ pool.getConnection()
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
 });
-**/
+
+
+/**
 
 // create an empty modbus client
 const ModbusRTU = require("modbus-serial");
@@ -68,3 +69,5 @@ setInterval(async function() {
     const test = await client.readCoils(503, 1);
     console.log(test.data);
 }, 1000);
+
+**/

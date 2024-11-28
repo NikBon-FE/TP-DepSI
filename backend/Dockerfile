@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY package.json ./*
 
-RUN npm install-g nodemon
+RUN npm install -g nodemon
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 5001
 
-CMD ["nodemon", "index.js"]
+CMD ["nodemon", "--legacy-watch","index.js"]
