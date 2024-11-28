@@ -15,6 +15,8 @@ __copyright__ = "Unilasalle Amiens"
 __date__ = "2024-??-??"
 __version__= "1.0.0"
 
+/**
+
 const express = require('express');
 const mariadb = require('mariadb');
 const cors = require('cors');
@@ -50,3 +52,19 @@ pool.getConnection()
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
 });
+**/
+
+// create an empty modbus client
+const ModbusRTU = require("modbus-serial");
+const client = new ModbusRTU();
+const test = []
+// open connection to a tcp line
+client.connectTCP("172.16.1.24", { port: 502 });
+client.setID(1);
+
+// read the values of 10 registers starting at address 0
+// on device number 1. and log the values to the console.
+setInterval(async function() {
+    const test = await client.readCoils(503, 1);
+    console.log(test.data);
+}, 1000);
