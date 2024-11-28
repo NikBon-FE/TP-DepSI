@@ -30,6 +30,8 @@ app.use(cors());
 app.use(express.json());
 
 // Configuration de la connexion à MariaDB
+
+/*
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
@@ -47,6 +49,7 @@ pool.getConnection()
     .catch(err => {
         console.error("Erreur de connexion à MariaDB", err);
     });
+    */
 
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
