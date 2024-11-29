@@ -31,15 +31,16 @@ app.use(express.json());
 
 // Configuration de la connexion à MariaDB
 
-/*
+
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: '',   // <-- INSERER LE NOM DE LA DATABASE ICI
+    database: 'donnee_deploiment_si',   // <-- INSERER LE NOM DE LA DATABASE ICI
     connectionLimit: 5
 });
 
+/*
 // Tester la connexion à la base de données
 pool.getConnection()
     .then(conn => {
