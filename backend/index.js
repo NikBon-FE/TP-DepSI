@@ -182,4 +182,4 @@ connect();
 
 // Configurer un intervalle pour lire du périphérique Modbus
 setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
-
+*/
