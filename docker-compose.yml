@@ -1,10 +1,11 @@
 services:
   frontend:
-    image: nginx:latest
+    image: nginx:1.27.3
     ports:
       - "8080:80"
     volumes:
       - ./frontend:/usr/share/nginx/html
+      - ./frontend:/usr/share/nginx/js
     networks:
       - hackathon_network
 
@@ -16,18 +17,23 @@ services:
       - db
     volumes:
       - ./backend:/app  # Mount your local backend folder to /app in the 
+    #env_file:
+    #  - .env
+    #depends_on:
+    #  - db
     networks:
       - hackathon_network
 
   db:
-    image: mariadb
+    image: mariadb:11.6.2
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: hackathon
     ports:
       - "3307:3307"
     volumes:
-      - db_data:/var/lib/mysql
+    #- db_data:/var/lib/mysql
+     - ./db/donnee_deploiment_si.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - hackathon_network
 
