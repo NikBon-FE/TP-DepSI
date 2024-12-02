@@ -28,7 +28,7 @@ services:
     image: mariadb:11.6.2
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: hackathon
+      MYSQL_DATABASE: donnee_deploiment_si #originalement "hackathon"
     ports:
       - "3307:3307"
     volumes:

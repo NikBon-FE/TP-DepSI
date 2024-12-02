@@ -33,7 +33,7 @@ app.use(express.json());
 
 
 const pool = mariadb.createPool({
-    host: 'localhost',
+    host: 'db',
     user: 'root',
     password: 'root',
     database: 'donnee_deploiment_si',   // <-- INSERER LE NOM DE LA DATABASE ICI
@@ -74,8 +74,33 @@ async function connect() {
   }
 }
 
+
+
 /*FONCTION D'ECHANGE D'INFORMATION
 POUR INTERAGIR AVEC L'AUTOMATE*/
+
+async function readModbus() {
+  try {
+    const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
+    //console.log("Réponse reçue :", response.data[0]);  // Afficher les données
+    if (response.data[0] == true){
+      console.log("Réponse reçue :oui en vrai je...");
+    }
+  } catch (error) {
+    console.error("Erreur lors de la lecture du périphérique Modbus :", error);
+    client.close();  // Fermer la connexion en cas d'erreur
+    setTimeout(connect, 5000);  // Reconnexion après 5 secondes en cas d'erreur
+  }
+}
+
+// Connexion initiale
+connect();
+
+// Configurer un intervalle pour lire du périphérique Modbus
+setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
+
+
+
 
 //FONCTION: INPUT INFORMATION DANS LE TABLEAU "VAR ACTIVE"
 app.post('/varActive/input', async (req, res) => {
@@ -132,7 +157,7 @@ app.post('/automate/input', async (req, res) => {
 //FONCTION: INPUT INFORMATION DANS LE TABLEAU "FREQUENCE"
 app.post('/frequence/input', async (req, res) => {
   const { Nom_frequence, Temps_frequence} = req.body;
-
+  console.log(Nom_frequence + Temps_frequence)
   // Validate request body
   if (!Nom_frequence || !Temps_frequence) {
       return res.status(400).json({ error: 'All fields must be filled correctly.' });
@@ -155,29 +180,20 @@ app.post('/frequence/input', async (req, res) => {
   }
 });
 
-/*FONCTION DE CONNECTION A L'AUTOMATE
-DOIT ÊTRE MODIFIE POUR QUE CE SOIS MODULABLE*/
-
-async function readModbus() {
+//LOGIN CHECK
+app.get('/login/check', async (req, res) => {
+  let conn;
   try {
-    const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
-    console.log("Réponse reçue :", response.data[0]);  // Afficher les données
-    if (response.data[0] == true){
-      console.log("Réponse reçue :oui en vrai je...");
-    }
-    else{
-      console.log("Réponse reçue :non mais je suis pas d'accord");
-    }
-  } catch (error) {
-    console.error("Erreur lors de la lecture du périphérique Modbus :", error);
-    client.close();  // Fermer la connexion en cas d'erreur
-    setTimeout(connect, 5000);  // Reconnexion après 5 secondes en cas d'erreur
+      conn = await pool.getConnection();
+  const check = await conn.query(
+    "SELECT operators.ID, operators.Utilisateur, operators.Password, operators.Droit_int\
+        from operators"
+  );
+
+  res.json(check);
+  } catch(error) {
+    res.status(500).json({ error: error.message });
+  } finally {
+    if (conn) conn.release();
   }
-}
-
-// Connexion initiale
-connect();
-
-// Configurer un intervalle pour lire du périphérique Modbus
-setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
-
+  })
