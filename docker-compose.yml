@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   frontend:
     image: nginx:latest
@@ -11,13 +9,13 @@ services:
       - hackathon_network
 
   backend:
-    build: ./backend #Pas d'image standard, car Dockerfile (on la fait nous même)
+    build: ./backend  # The path to your Dockerfile
     ports:
-      - "5001:5001"
+      - "5001:5001"   # Expose port 5001 for the backend API
     depends_on:
       - db
     volumes:
-      - ./backend:/app
+      - ./backend:/app  # Mount your local backend folder to /app in the 
     networks:
       - hackathon_network
 

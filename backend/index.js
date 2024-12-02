@@ -52,26 +52,34 @@ pool.getConnection()
     });
     */
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
 });
 
-
-/**
-
-// create an empty modbus client
 const ModbusRTU = require("modbus-serial");
 const client = new ModbusRTU();
-const test = []
-// open connection to a tcp line
-client.connectTCP("172.16.1.24", { port: 502 });
-client.setID(1);
 
-// read the values of 10 registers starting at address 0
-// on device number 1. and log the values to the console.
-setInterval(async function() {
-    const test = await client.readCoils(503, 1);
-    console.log(test.data);
-}, 1000);
+// The IP address and port of your Modbus device
+const modbusDeviceIP = "172.16.1.24";
+const modbusPort = 502;
 
-**/
+client.connectTCP(modbusDeviceIP, { port: modbusPort })
+  .then(() => {
+    client.setID(1);  // Set the Modbus device ID
+
+    // Create an array to store the test results (optional)
+    const test = [];
+
+    // Set an interval to read from the Modbus device
+    setInterval(async function() {
+      try {
+        const response = await client.readCoils(503, 1);  // Read 1 coil from address 503
+        console.log(response.data);  // Log the response data
+      } catch (error) {
+        console.error("Error reading from Modbus device:", error);
+      }
+    }, 1000);  // Adjust the interval as needed
+  })
+  .catch(error => {
+    console.error("Error connecting to Modbus device:", error);
+});
