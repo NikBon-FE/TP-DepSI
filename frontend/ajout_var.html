@@ -21,6 +21,10 @@
       }
       #tableContainer {
         width: 100%;
+        background-color: white;
+        border: 2px solid grey;
+        border-radius: 10px;
+        padding: 20px;
       }
       table {
         width: 100%;
@@ -41,140 +45,107 @@
     <div class="container-fluid">
       <div class="row">
         
-        <!-- Colonne gauche - 8/12 avec le tableau -->
+        <!-- Colonne gauche - 8/12 avec le formulaire et le tableau -->
         <div class="col-6 d-flex flex-column justify-content-center">
             <div class="container">
-            <h1>SUIVI VARIABLE</h1>
-            <form>
-              <!-- Liste déroulante 1 -->
-              <div class="mb-3">
-                <label for="dropdown1" class="form-label">Choisissez la variable 1</label>
-                <select id="dropdown1" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-              
-              <!-- Liste déroulante 2 -->
-              <div class="mb-3">
-                <label for="dropdown2" class="form-label">Choisissez la variable 2</label>
-                <select id="dropdown2" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-              
-              <!-- Liste déroulante 3 -->
-              <div class="mb-3">
-                <label for="dropdown3" class="form-label">Choisissez la variable 3</label>
-                <select id="dropdown3" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
+              <h2>Ajout variable</h2>
+              <form>
+                <!-- Nom de la variable -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">Nom variable</label>
+                  <input id="select_username" type="text" class="form-control">
+                </div>
+                
+                <!-- Liste déroulante 2 -->
+                <div class="mb-3">
+                  <label for="dropdown2" class="form-label">Choisissez l'automate</label>
+                  <select id="dropdown2" class="form-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                  </select>
+                </div>
 
-              <!-- Liste déroulante 4 -->
-              <div class="mb-3">
-                <label for="dropdown4" class="form-label">Choisissez la variable 4</label>
-                <select id="dropdown4" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
+                <!-- Variable automate -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">Nom variable</label>
+                  <input id="select_username" type="text" class="form-control">
+                </div>
+                
+                <!-- Choix frequence -->
+                <div class="mb-3">
+                  <label for="dropdown3" class="form-label">Choisissez la frequence</label>
+                  <select id="dropdown3" class="form-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                  </select>
+                </div>
 
-              <!-- Cases à cocher -->
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox1">
-                <label class="form-check-label" for="checkbox1">
-                  Temps start
-                </label>
-              </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox2">
-                <label class="form-check-label" for="checkbox2">
-                  Temps end
-                </label>
-              </div>
+                <!-- Bouton de soumission -->
+                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter la variable dans le suivi</button>
+              </form>
+            </div>
 
-              <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100 mb-3">Afficher tableau</button>
-              <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100">Export_to_csv</button>
-
-            </form>
-          </div>
+            <!-- Tableau sous le formulaire -->
+            <div id="tableContainer" class="w-100 mt-4">
+                <!-- Tableau à 5 colonnes -->
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nom variable</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Exemple 1</td>
+                      <td>Exemple 2</td>
+                    </tr>
+                    <tr>
+                      <td>Exemple 6</td>
+                      <td>Exemple 7</td>
+                    </tr>
+                    <!-- Ajoutez d'autres lignes ici selon le besoin -->
+                  </tbody>
+                </table>
+            </div>
         </div>
         
         <!-- Colonne droite - 4/12 avec le formulaire -->
         <div class="col-6 d-flex flex-column justify-content-center">
-          <div class="container">
-            <h1>SUIVI VARIABLE</h1>
-            <form>
-              <!-- Liste déroulante 1 -->
-              <div class="mb-3">
-                <label for="dropdown1" class="form-label">Choisissez la variable 1</label>
-                <select id="dropdown1" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-              
-              <!-- Liste déroulante 2 -->
-              <div class="mb-3">
-                <label for="dropdown2" class="form-label">Choisissez la variable 2</label>
-                <select id="dropdown2" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-              
-              <!-- Liste déroulante 3 -->
-              <div class="mb-3">
-                <label for="dropdown3" class="form-label">Choisissez la variable 3</label>
-                <select id="dropdown3" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
+            <div class="container">
+              <h2>Automate et Frequence</h2>
+              <form>
+                <!-- Nom de la variable -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">Nom Automate</label>
+                  <input id="select_username" type="text" class="form-control">
+                </div>
+                <!-- Nom de la variable -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">IP Automate</label>
+                  <input id="select_username" type="text" class="form-control">
+                </div>
+                
+                <!-- Bouton de soumission -->
+                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter automate</button>
 
-              <!-- Liste déroulante 4 -->
-              <div class="mb-3">
-                <label for="dropdown4" class="form-label">Choisissez la variable 4</label>
-                <select id="dropdown4" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-
-              <!-- Cases à cocher -->
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox1">
-                <label class="form-check-label" for="checkbox1">
-                  Temps start
-                </label>
-              </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox2">
-                <label class="form-check-label" for="checkbox2">
-                  Temps end
-                </label>
-              </div>
-
-              <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100 mb-3">Afficher tableau</button>
-              <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100">Export_to_csv</button>
-
-            </form>
-          </div>
+                <!-- Nom de la variable -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">Nom frequence</label>
+                  <input id="select_username" type="text" class="form-control">
+                </div>
+                <!-- Nom de la variable -->
+                <div class="form_case mb-3">
+                  <label for="select_username" class="form-label">Temps</label>
+                  <input id="select_username" type="time" class="form-control">
+                </div>
+                
+                <!-- Bouton de soumission -->
+                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter Frequence</button>
+              </form>
+            </div>
         </div>
         
       </div>
