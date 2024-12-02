@@ -163,10 +163,10 @@ async function readModbus() {
     const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
     console.log("Réponse reçue :", response.data[0]);  // Afficher les données
     if (response.data[0] == true){
-      console.log("Réponse reçue : Awesomesauceman");
+      console.log("Réponse reçue :oui en vrai je...");
     }
     else{
-      console.log("Réponse reçue : NotAwesomesauce");
+      console.log("Réponse reçue :non mais je suis pas d'accord");
     }
   } catch (error) {
     console.error("Erreur lors de la lecture du périphérique Modbus :", error);
@@ -180,4 +180,3 @@ connect();
 
 // Configurer un intervalle pour lire du périphérique Modbus
 setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
-
