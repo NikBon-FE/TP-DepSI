@@ -74,6 +74,90 @@ async function connect() {
   }
 }
 
+/*FONCTION D'ECHANGE D'INFORMATION
+POUR INTERAGIR AVEC L'AUTOMATE*/
+
+//FONCTION: INPUT INFORMATION DANS LE TABLEAU "VAR ACTIVE"
+app.post('/varActive/input', async (req, res) => {
+  const { Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Status } = req.body;
+
+  // Validate request body
+  if (!Variable_ID || !Date_creation || !Automate_ID || !Nom_var_auto || !Frequence_ID || !Status) {
+      return res.status(400).json({ error: 'All fields must be filled correctly.' });
+  }
+
+  try {
+      const conn = await pool.getConnection();
+      // If any overlapping tasks are found, return an error
+      const result = await conn.query(
+        'INSERT INTO tasks (Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Status) VALUES (?, ?, ?, ?, ?, ?)',
+        [Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Status]
+      );
+
+      conn.release();
+      
+      res.status(201).json({ message: 'Task created successfully!'});
+  } catch (error) {
+      console.error('Error inserting task:', error);
+      res.status(500).json({ error: 'Failed to create task.' });
+  }
+});
+
+//FONCTION: INPUT INFORMATION DANS LE TABLEAU "AUTOMATE"
+app.post('/automate/input', async (req, res) => {
+  const { Nom_automate, IP_automate} = req.body;
+
+  // Validate request body
+  if (!Nom_automate || !IP_automate) {
+      return res.status(400).json({ error: 'All fields must be filled correctly.' });
+  }
+
+  try {
+      const conn = await pool.getConnection();
+      // If any overlapping tasks are found, return an error
+      const result = await conn.query(
+        'INSERT INTO tasks (Nom_automate, IP_automate) VALUES (?, ?)',
+        [Nom_automate, IP_automate]
+      );
+
+      conn.release();
+      
+      res.status(201).json({ message: 'Task created successfully!'});
+  } catch (error) {
+      console.error('Error inserting task:', error);
+      res.status(500).json({ error: 'Failed to create task.' });
+  }
+});
+
+//FONCTION: INPUT INFORMATION DANS LE TABLEAU "FREQUENCE"
+app.post('/frequence/input', async (req, res) => {
+  const { Nom_frequence, Temps_frequence} = req.body;
+
+  // Validate request body
+  if (!Nom_frequence || !Temps_frequence) {
+      return res.status(400).json({ error: 'All fields must be filled correctly.' });
+  }
+
+  try {
+      const conn = await pool.getConnection();
+      // If any overlapping tasks are found, return an error
+      const result = await conn.query(
+        'INSERT INTO tasks (Nom_frequence, Temps_frequence) VALUES (?, ?)',
+        [Nom_frequence, Temps_frequence]
+      );
+
+      conn.release();
+      
+      res.status(201).json({ message: 'Task created successfully!'});
+  } catch (error) {
+      console.error('Error inserting task:', error);
+      res.status(500).json({ error: 'Failed to create task.' });
+  }
+});
+
+/*FONCTION DE CONNECTION A L'AUTOMATE
+DOIT ÊTRE MODIFIE POUR QUE CE SOIS MODULABLE*/
+
 async function readModbus() {
   try {
     const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
@@ -96,3 +180,4 @@ connect();
 
 // Configurer un intervalle pour lire du périphérique Modbus
 setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
+
