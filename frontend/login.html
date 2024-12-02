@@ -5,83 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Log-on Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-
-  <style>
-    body {
+    <style>
+      body {
         background-color: rgb(255, 65, 25);
-    }
-    .container{
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
         background-color: white;
         border: 2px solid grey;
         border-radius: 10px;
-        padding: 10px;
-    }
-    .container-wrapper {
-        display: flex; /* Utilisation de Flexbox */
-        flex-direction: column; /* Aligner les éléments en colonne */
-        align-items: center; /* Centrer les éléments horizontalement */
-        gap: 20px; /* Ajouter de l'espace entre les conteneurs */
-        margin-top: 20px; /* Un peu de marge en haut pour que ce soit plus joli */
-        width: 100%; /* Prendre toute la largeur disponible */
-        max-width: 100%; /* S'assurer qu'il n'y a pas de limite supplémentaire */
-    }
-    .form-control{
-        margin-bottom: 20px;
-    }
-    .form_case{
-        margin-bottom: 10px;
-    }
-    .btn_select_login{
-        width: 300px;
-    }
-    #col_select_form {
-        display: flex; /* Utilisation de Flexbox */
-        justify-content: center; /* Centre horizontalement */
-        align-items: center; /* Centre verticalement */
-        height: 100vh; /* La hauteur de la colonne prend toute la hauteur de la fenêtre */
-    }
-    .texte_important{
-        text-emphasis-color: red;
-    }
-    
-    h1 {
+        padding: 20px;
+        margin: 10px;
+      }
+      .left-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .right-section img {
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      h1 {
         text-align: center;
-    }
-
-  </style>
-
+      }
+    </style>
+  </head>
+  
   <body>
-    <form>
-        <div class="col-4" id="col_select_form">
-            <div class="container-wrapper">
-                <div class="container" id="container_select_introduction">
-                    <h1> Introduction</h1>
-                    <div class="text-start text-wrap">
-                        Ce document présente le sujet de TP réalisé par Nicolas Bontemps et Alexis Kluck dans le cadre du cours de 'Déploiement d'un Système d'Information' dispensé par M. Hanquiez. Le code a été développé le XX/XX/XX. Pour accéder au code, il est nécessaire de se connecter avec un identifiant utilisateur. D'autres utilisateurs pourront être ajoutés ultérieurement. Le programme inclut également un système de gestion des niveaux d'importance. Pour accéder à toutes les fonctionnalités, il est nécessaire de se connecter avec un compte 'dirigeant'.
-                    </div>
-                </div>
-                <div class="container" id="container_select_form">
-                    <form id="form_select_login">
-                        <h1>Select User</h1>
-                        <div class="form_case">
-                            <label for="select_username" class="form-label">Username</label>
-                            <input id="select_username" type="text" class="form-control" placeholder=""></input>
-                        </div>
-                        <div class="form_case">
-                            <label for="select_password" class="form-label">Password</label>
-                            <input id="select_password" type="text" class="form-control" placeholder=""></input>
-                        </div>
-                        <div>
-                            <button id="btn_select_login" type="button" class="form-control">Login</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <div class="container-fluid">
+      <div class="row">
+        
+        <!-- Colonne gauche - 4/12 -->
+        <div class="col-4 left-section">
+          <div class="container" id="container_select_introduction">
+            <h1>Introduction</h1>
+            <p>
+              Ce document présente le sujet de TP réalisé par Nicolas Bontemps et Alexis Kluck dans le cadre du cours de 'Déploiement d'un Système d'Information' dispensé par M. Hanquiez. Le code a été développé le XX/XX/XX. Pour accéder au code, il est nécessaire de se connecter avec un identifiant utilisateur. D'autres utilisateurs pourront être ajoutés ultérieurement. Le programme inclut également un système de gestion des niveaux d'importance. Pour accéder à toutes les fonctionnalités, il est nécessaire de se connecter avec un compte 'dirigeant'.
+            </p>
+          </div>
+          
+          <div class="container" id="container_select_form">
+            <h1>Select User</h1>
+            <form id="form_select_login">
+              <div class="form_case">
+                <label for="select_username" class="form-label">Username</label>
+                <input id="select_username" type="text" class="form-control">
+              </div>
+              <div class="form_case">
+                <label for="select_password" class="form-label">Password</label>
+                <input id="select_password" type="password" class="form-control">
+              </div>
+              <button id="btn_select_login" type="button" class="btn btn-primary w-100">Login</button>
+            </form>
+          </div>
         </div>
-        <div class="col-8">
-            <img src="images/front_image.jpg" class="img-fluid">
+        
+        <!-- Colonne droite - 8/12 -->
+        <div class="col-8 right-section d-flex align-items-center justify-content-center">
+          <img src="images/front_image.jpg" class="img-fluid" alt="Image">
         </div>
-    </form>
+        
+      </div>
+    </div>
   </body>
+</html>
