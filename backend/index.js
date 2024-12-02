@@ -52,11 +52,10 @@ pool.getConnection()
     });
     */
 
-    
 app.listen(port, async () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
 });
-/*
+
 const ModbusRTU = require("modbus-serial");
 const client = new ModbusRTU();
 
@@ -74,7 +73,7 @@ async function connect() {
     setTimeout(connect, 5000);  // Tentative de reconnexion après 5 secondes
   }
 }
-*/
+
 /*FONCTION D'ECHANGE D'INFORMATION
 POUR INTERAGIR AVEC L'AUTOMATE*/
 
@@ -156,10 +155,9 @@ app.post('/frequence/input', async (req, res) => {
   }
 });
 
-
 /*FONCTION DE CONNECTION A L'AUTOMATE
 DOIT ÊTRE MODIFIE POUR QUE CE SOIS MODULABLE*/
-/*
+
 async function readModbus() {
   try {
     const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
@@ -182,4 +180,3 @@ connect();
 
 // Configurer un intervalle pour lire du périphérique Modbus
 setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
-
