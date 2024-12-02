@@ -25,10 +25,13 @@
         border: 2px solid grey;
         border-radius: 10px;
         padding: 20px;
+        overflow: hidden;
+        max-height: 200px; /* Limiter la hauteur du tableau */
       }
       table {
         width: 100%;
         border-collapse: collapse;
+        transition: transform 0.3s ease; /* Ajoute une transition pour un effet de défilement fluide */
       }
       table th, table td {
         border: 1px solid #ddd;
@@ -37,6 +40,16 @@
       }
       h1 {
         text-align: center;
+      }
+      /* Style des flèches */
+      .arrow-container {
+        text-align: center;
+        margin-top: 10px;
+      }
+      .arrow {
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px;
       }
     </style>
   </head>
@@ -90,10 +103,11 @@
             <!-- Tableau sous le formulaire -->
             <div id="tableContainer" class="w-100 mt-4">
                 <!-- Tableau à 5 colonnes -->
-                <table>
+                <table id="dataTable">
                   <thead>
                     <tr>
                       <th>Nom variable</th>
+                      <th>StatusVariable_auto</th>
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -101,14 +115,37 @@
                     <tr>
                       <td>Exemple 1</td>
                       <td>Exemple 2</td>
+                      <td>Exemple 3</td>
                     </tr>
                     <tr>
+                      <td>Exemple 4</td>
+                      <td>Exemple 5</td>
                       <td>Exemple 6</td>
+                    </tr>
+                    <tr>
                       <td>Exemple 7</td>
+                      <td>Exemple 8</td>
+                      <td>Exemple 9</td>
+                    </tr>
+                    <tr>
+                      <td>Exemple 10</td>
+                      <td>Exemple 11</td>
+                      <td>Exemple 12</td>
+                    </tr>
+                    <tr>
+                      <td>Exemple 13</td>
+                      <td>Exemple 14</td>
+                      <td>Exemple 15</td>
                     </tr>
                     <!-- Ajoutez d'autres lignes ici selon le besoin -->
                   </tbody>
                 </table>
+            </div>
+
+            <!-- Flèches de défilement -->
+            <div class="arrow-container">
+              <span id="arrowUp" class="arrow">&#8593;</span> <!-- Flèche haut -->
+              <span id="arrowDown" class="arrow">&#8595;</span> <!-- Flèche bas -->
             </div>
         </div>
         
@@ -150,5 +187,38 @@
         
       </div>
     </div>
+
+    <script>
+      let currentIndex = 0;
+      const rowsPerPage = 2;
+      const tableRows = document.querySelectorAll('#dataTable tbody tr');
+      const totalRows = tableRows.length;
+
+      // Afficher les lignes de la table avec un index de départ
+      function showRows() {
+        tableRows.forEach((row, index) => {
+          row.style.display = (index >= currentIndex && index < currentIndex + rowsPerPage) ? '' : 'none';
+        });
+      }
+
+      // Flèche bas
+      document.getElementById('arrowDown').addEventListener('click', () => {
+        if (currentIndex + rowsPerPage < totalRows) {
+          currentIndex += rowsPerPage;
+          showRows();
+        }
+      });
+
+      // Flèche haut
+      document.getElementById('arrowUp').addEventListener('click', () => {
+        if (currentIndex - rowsPerPage >= 0) {
+          currentIndex -= rowsPerPage;
+          showRows();
+        }
+      });
+
+      // Initialiser la table
+      showRows();
+    </script>
   </body>
 </html>
