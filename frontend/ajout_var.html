@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ajout_var</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+      body {
+        background-color: white;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background-color: white;
+        border: 2px solid grey;
+        border-radius: 10px;
+        padding: 20px;
+      }
+      #tableContainer {
+        width: 100%;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        
+        <!-- Colonne gauche - 8/12 avec le tableau -->
+        <div class="col-6 d-flex flex-column justify-content-center">
+            <div class="container">
+            <h1>SUIVI VARIABLE</h1>
+            <form>
+              <!-- Liste déroulante 1 -->
+              <div class="mb-3">
+                <label for="dropdown1" class="form-label">Choisissez la variable 1</label>
+                <select id="dropdown1" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+              
+              <!-- Liste déroulante 2 -->
+              <div class="mb-3">
+                <label for="dropdown2" class="form-label">Choisissez la variable 2</label>
+                <select id="dropdown2" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+              
+              <!-- Liste déroulante 3 -->
+              <div class="mb-3">
+                <label for="dropdown3" class="form-label">Choisissez la variable 3</label>
+                <select id="dropdown3" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+
+              <!-- Liste déroulante 4 -->
+              <div class="mb-3">
+                <label for="dropdown4" class="form-label">Choisissez la variable 4</label>
+                <select id="dropdown4" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+
+              <!-- Cases à cocher -->
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="checkbox1">
+                <label class="form-check-label" for="checkbox1">
+                  Temps start
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="checkbox2">
+                <label class="form-check-label" for="checkbox2">
+                  Temps end
+                </label>
+              </div>
+
+              <!-- Bouton de soumission -->
+              <button type="submit" class="btn btn-primary w-100 mb-3">Afficher tableau</button>
+              <!-- Bouton de soumission -->
+              <button type="submit" class="btn btn-primary w-100">Export_to_csv</button>
+
+            </form>
+          </div>
+        </div>
+        
+        <!-- Colonne droite - 4/12 avec le formulaire -->
+        <div class="col-6 d-flex flex-column justify-content-center">
+          <div class="container">
+            <h1>SUIVI VARIABLE</h1>
+            <form>
+              <!-- Liste déroulante 1 -->
+              <div class="mb-3">
+                <label for="dropdown1" class="form-label">Choisissez la variable 1</label>
+                <select id="dropdown1" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+              
+              <!-- Liste déroulante 2 -->
+              <div class="mb-3">
+                <label for="dropdown2" class="form-label">Choisissez la variable 2</label>
+                <select id="dropdown2" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+              
+              <!-- Liste déroulante 3 -->
+              <div class="mb-3">
+                <label for="dropdown3" class="form-label">Choisissez la variable 3</label>
+                <select id="dropdown3" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+
+              <!-- Liste déroulante 4 -->
+              <div class="mb-3">
+                <label for="dropdown4" class="form-label">Choisissez la variable 4</label>
+                <select id="dropdown4" class="form-select">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </select>
+              </div>
+
+              <!-- Cases à cocher -->
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="checkbox1">
+                <label class="form-check-label" for="checkbox1">
+                  Temps start
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="checkbox2">
+                <label class="form-check-label" for="checkbox2">
+                  Temps end
+                </label>
+              </div>
+
+              <!-- Bouton de soumission -->
+              <button type="submit" class="btn btn-primary w-100 mb-3">Afficher tableau</button>
+              <!-- Bouton de soumission -->
+              <button type="submit" class="btn btn-primary w-100">Export_to_csv</button>
+
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </body>
+</html>
