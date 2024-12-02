@@ -14,15 +14,24 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table donnee_deploiment_si.automate : ~4 rows (environ)
+INSERT INTO `automate` (`ID`, `Nom_automate`, `IP_automate`) VALUES
+	(1, 'Zone 4', '172.16.1.24'),
+	(2, 'Zone 3', '172.16.1.23'),
+	(3, 'Zone 2', '172.16.1.22'),
+	(4, 'Zone 1', '172.16.1.21');
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table donnee_deploiment_si.frequence : ~1 rows (environ)
+INSERT INTO `frequence` (`ID`, `Nom_frequence`, `Temps_frequence`) VALUES
+	(1, '1 seconde', '00:00:01');
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table donnee_deploiment_si.login : ~1 rows (environ)
+INSERT INTO `login` (`ID`, `Utilisateur`, `Password`, `Droit_int`) VALUES
+	(1, 'admin', 'admin', 1);
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table donnee_deploiment_si.suivi : ~0 rows (environ)
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table donnee_deploiment_si.variable_active : ~0 rows (environ)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
