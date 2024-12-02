@@ -167,7 +167,7 @@ app.post('/frequence/input', async (req, res) => {
       const conn = await pool.getConnection();
       // If any overlapping tasks are found, return an error
       const result = await conn.query(
-        'INSERT INTO tasks (Nom_frequence, Temps_frequence) VALUES (?, ?)',
+        'INSERT INTO frequence (Nom_frequence, Temps_frequence) VALUES (?, ?)',
         [Nom_frequence, Temps_frequence]
       );
 
