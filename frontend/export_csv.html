@@ -154,10 +154,16 @@
             <button type="button" class="btn btn-secondary w-100" onclick="window.location.href='ajout_var.html';">ajout var</button>
             <button type="button" class="btn btn-secondary w-100" onclick="window.location.href='graphe.html';">graphe</button>
           </div>
-
+          <a id="btn_exportCsv" class="button"></a>
         </div>
         
       </div>
     </div>
   </body>
+  <script>
+         document.getElementById("btn_graphe_return").addEventListener('click', function() {
+        const droit_acces = localStorage.getItem('droit_acces');
+        location.href = `new_task.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+      });
+  </script>
 </html>

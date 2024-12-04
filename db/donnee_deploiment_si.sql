@@ -44,7 +44,10 @@ CREATE TABLE IF NOT EXISTS `frequence` (
 
 -- Listage des données de la table donnee_deploiment_si.frequence : ~1 rows (environ)
 INSERT INTO `frequence` (`ID`, `Nom_frequence`, `Temps_frequence`) VALUES
-	(1, '1 seconde', '00:00:01');
+	(1, '1 seconde', '00:00:01'),
+  (2, '10 secondes', '00:00:10'),
+  (3, '1 minutes', '00:01:00');
+
 
 -- Listage de la structure de la table donnee_deploiment_si. login
 CREATE TABLE IF NOT EXISTS `login` (
@@ -57,8 +60,9 @@ CREATE TABLE IF NOT EXISTS `login` (
 
 -- Listage des données de la table donnee_deploiment_si.login : ~1 rows (environ)
 INSERT INTO `login` (`ID`, `Utilisateur`, `Password`, `Droit_int`) VALUES
-	(1, 'admin', 'admin', 1);
-
+	(1, 'admin', 'admin', 1),
+  (2, 'operator', 'operator',0);
+  
 -- Listage de la structure de la table donnee_deploiment_si. suivi
 CREATE TABLE IF NOT EXISTS `suivi` (
   `Variable_ID` int(11) NOT NULL,

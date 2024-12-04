@@ -190,13 +190,15 @@
                 <button type="button" class="btn btn-secondary w-100" onclick="window.location.href='graphe.html';">graphe</button>
                 <button type="button" class="btn btn-secondary w-100" onclick="window.location.href='main.html';">main</button>
               </div>
+            
 
         </div>
-        
+        <a id="btn_ajoutVar_return" class="button"></a>
       </div>
     </div>
 
     <script>
+      //FONCTIONS ASSOCIE A LA TABLE
       let currentIndex = 0;
       const rowsPerPage = 2;
       const tableRows = document.querySelectorAll('#dataTable tbody tr');
@@ -227,6 +229,14 @@
 
       // Initialiser la table
       showRows();
+
+
+      //RETOUR A LA PAGE "MAIN"
+      document.getElementById("btn_ajoutVar_return").addEventListener('click', function() {
+        const droit_acces = localStorage.getItem('droit_acces');
+        location.href = `new_task.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+      });
+
     </script>
   </body>
 </html>
