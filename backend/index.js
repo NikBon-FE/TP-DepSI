@@ -185,15 +185,16 @@ app.get('/login/check', async (req, res) => {
   let conn;
   try {
       conn = await pool.getConnection();
-  const check = await conn.query(
-    "SELECT operators.ID, operators.Utilisateur, operators.Password, operators.Droit_int\
-        from operators"
-  );
-
-  res.json(check);
-  } catch(error) {
-    res.status(500).json({ error: error.message });
+      console.log("Database connection established");
+      const check = await conn.query(
+        "SELECT login.ID, login.Utilisateur, login.Password, login.Droit_int FROM login"
+      );
+      res.json(check);
+  } catch (error) {
+      console.error('Database error:', error.message); // Log the actual error
+      res.status(500).json({ error: error.message });
   } finally {
-    if (conn) conn.release();
+      if (conn) conn.release();
   }
-  })
+});
+

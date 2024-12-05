@@ -47,7 +47,7 @@
       <a id="btn_main_graphe" class="large-button">GRAPHE</a>
       <a id="btn_main_ajoutVar" class="large-button">AJOUT VAR</a>
     </div>
-    <a location.href="login.html" id="btn_main_quit" class="button">QUIT</a>
+    <button window.location.href="login.html" id="btn_main_quit" class="button">QUIT</button>
   </body>
   <script>
       if(dataFromStorage =! 1){
@@ -57,17 +57,21 @@
       //COMMANDES POUR PASSER D'UN ECRAN A UN AUTRE (ET GARDER "DROIT_ACCES")
       document.getElementById("btn_exportCsv").addEventListener('click', function() {
         const droit_acces = localStorage.getItem('droit_acces');
-        location.href = `new_task.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+        location.href = `ajout_var.html?droit_acces=${encodeURIComponent(droit_acces)}`;
       });
     
       document.getElementById("btn_main_graphe").addEventListener('click', function() {
         const droit_acces = localStorage.getItem('droit_acces');
-        location.href = `new_task.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+        location.href = `graphe.html?droit_acces=${encodeURIComponent(droit_acces)}`;
       });
 
       document.getElementById("btn_main_ajoutVar").addEventListener('click', function() {
         const droit_acces = localStorage.getItem('droit_acces');
-        location.href = `new_task.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+        location.href = `export_csv.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+      });
+
+      document.getElementById("btn_main_quit").addEventListener('click', function() {
+        location.href = `login.html`;
       });
 
   </script>
