@@ -71,11 +71,9 @@
                 
                 <!-- Liste déroulante 2 -->
                 <div class="mb-3">
-                  <label for="dropdown2" class="form-label">Choisissez l'automate</label>
-                  <select id="dropdown2" class="form-select">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                  <label for="dropdownAutom">Choisissez l'automate</label>
+                  <select id="dropdownAutom" class="form-control">
+                    <option value="">Loading...</option>
                   </select>
                 </div>
 
@@ -87,11 +85,9 @@
                 
                 <!-- Choix frequence -->
                 <div class="mb-3">
-                  <label for="dropdown3" class="form-label">Choisissez la frequence</label>
-                  <select id="dropdown3" class="form-select">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                  <label for="dropdownFreq" class="form-label">Choisissez la frequence</label>
+                  <select id="dropdownFreq" class="form-select">
+                    <option value="">Loading...</option>
                   </select>
                 </div>
 
@@ -156,31 +152,31 @@
               <form>
                 <!-- Nom de la variable -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">Nom Automate</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_automName" class="form-label">Nom Automate</label>
+                  <input id="case_ajoutVar_automName" type="text" class="form-control">
                 </div>
                 <!-- Nom de la variable -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">IP Automate</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_automIP" class="form-label">IP Automate</label>
+                  <input id="case_ajoutVar_automIP" type="text" class="form-control">
                 </div>
                 
                 <!-- Bouton de soumission -->
-                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter automate</button>
+                <button id="btn_ajoutVar_AutomSubmit" class="button">Ajouter Automate</button>
 
                 <!-- Nom de la variable -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">Nom frequence</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_frequName" class="form-label">Nom frequence</label>
+                  <input id="case_ajoutVar_frequName" type="text" class="form-control">
                 </div>
                 <!-- Nom de la variable -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">Temps</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_frequTemps" class="form-label">Temps</label>
+                  <input id="case_ajoutVar_frequTemps" type="text" class="form-control">
                 </div>
                 
                 <!-- Bouton de soumission -->
-                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter Frequence</button>
+                <button id="btn_ajoutVar_frequSubmit" class="button">Ajouter Frequence</button>
               </form>
             </div>
 
@@ -230,12 +226,137 @@
       // Initialiser la table
       showRows();
 
-
       //RETOUR A LA PAGE "MAIN"
       document.getElementById("btn_ajoutVar_return").addEventListener('click', function() {
         const droit_acces = localStorage.getItem('droit_acces');
         location.href = `main.html?droit_acces=${encodeURIComponent(droit_acces)}`;
       });
+
+      /*COMMANDES DE CREATION D'ELEMENTS*/
+      //FREQUENCE
+      document.getElementById('btn_ajoutVar_frequSubmit').addEventListener('click', async function(event) {
+        event.preventDefault(); // Empêche l'envoi classique du formulaire
+
+        const nomFrequence = document.getElementById('case_ajoutVar_frequName').value;
+        const tempsFrequence = document.getElementById('case_ajoutVar_frequTemps').value;
+        console.log("Test Concluant.")
+        // Validation des champs
+        if (!nomFrequence || !tempsFrequence) {
+            alert('Veuillez remplir tous les champs.');
+            return;
+        }
+
+        try {
+            // Envoi de la requête POST au backend
+            const response = await fetch('http://localhost:5001/frequence/input', {  // Assurez-vous d'utiliser "backend" comme adresse dans Docker
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  Nom_frequence: nomFrequence,
+                  Temps_frequence: tempsFrequence
+                })
+            });
+
+            // Vérification de la réponse du serveur
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'ajout de la fréquence.');
+            }
+
+            const result = await response.json();
+            document.getElementById('responseMessage').innerText = result.message;
+        } catch (error) {
+            console.error('Erreur:', error);
+            document.getElementById('responseMessage').innerText = 'Une erreur est survenue.';
+        }
+        initialize()
+      });
+
+        //AUTOMATE
+        document.getElementById('btn_ajoutVar_AutomSubmit').addEventListener('click', async function(event) {
+        event.preventDefault(); // Empêche l'envoi classique du formulaire
+
+        const nomAutom = document.getElementById('case_ajoutVar_automName').value;
+        const ipAutom = document.getElementById('case_ajoutVar_automIP').value;
+        console.log("Test Concluant.")
+        // Validation des champs
+        if (!nomAutom || !ipAutom) {
+            alert('Veuillez remplir tous les champs.');
+            return;
+        }
+
+        try {
+            // Envoi de la requête POST au backend
+            const response = await fetch('http://localhost:5001/automate/input', {  // Assurez-vous d'utiliser "backend" comme adresse dans Docker
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  Nom_automate: nomAutom,
+                  IP_automate: ipAutom
+                })
+            });
+
+            // Vérification de la réponse du serveur
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'ajout de la fréquence.');
+            }
+
+            const result = await response.json();
+            document.getElementById('responseMessage').innerText = result.message;
+        } catch (error) {
+            console.error('Erreur:', error);
+            document.getElementById('responseMessage').innerText = 'Une erreur est survenue.';
+        }
+        initialize()
+      });
+
+      async function fetchDropdownAutom() {
+        try {
+            const response = await fetch('http://localhost:5001/automate/check');
+            const partNumberValue = await response.json();
+            const select = document.getElementById("dropdownAutom");
+
+            select.innerHTML = ''; // Clear the loading option
+
+            partNumberValue.forEach(autom => {
+                const option = document.createElement('option');
+                option.value = autom.IP_automate; // Adjust based on your column name
+                option.textContent = autom .IP_automate; // Adjust based on your column name
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+      }
+
+      async function fetchDropdownFreq() {
+        try {
+            const response = await fetch('http://localhost:5001/frequence/check');
+            const partNumberValue = await response.json();
+            const select = document.getElementById("dropdownFreq");
+
+            select.innerHTML = ''; // Clear the loading option
+
+            partNumberValue.forEach(freq => {
+                const option = document.createElement('option');
+                option.value = freq.Temps_frequence; // Adjust based on your column name
+                option.textContent = freq.Temps_frequence; // Adjust based on your column name
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+      }
+
+      function initialize(){
+        fetchDropdownFreq();
+        fetchDropdownAutom();
+      };
+
+      window.onload = initialize()
 
     </script>
   </body>

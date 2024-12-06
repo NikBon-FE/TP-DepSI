@@ -141,7 +141,7 @@ app.post('/automate/input', async (req, res) => {
       const conn = await pool.getConnection();
       // If any overlapping tasks are found, return an error
       const result = await conn.query(
-        'INSERT INTO tasks (Nom_automate, IP_automate) VALUES (?, ?)',
+        'INSERT INTO automate (Nom_automate, IP_automate) VALUES (?, ?)',
         [Nom_automate, IP_automate]
       );
 
@@ -157,7 +157,6 @@ app.post('/automate/input', async (req, res) => {
 //FONCTION: INPUT INFORMATION DANS LE TABLEAU "FREQUENCE"
 app.post('/frequence/input', async (req, res) => {
   const { Nom_frequence, Temps_frequence} = req.body;
-  console.log(Nom_frequence + Temps_frequence)
   // Validate request body
   if (!Nom_frequence || !Temps_frequence) {
       return res.status(400).json({ error: 'All fields must be filled correctly.' });
@@ -169,6 +168,32 @@ app.post('/frequence/input', async (req, res) => {
       const result = await conn.query(
         'INSERT INTO frequence (Nom_frequence, Temps_frequence) VALUES (?, ?)',
         [Nom_frequence, Temps_frequence]
+      );
+
+      conn.release();
+      
+      res.status(201).json({ message: 'Task created successfully!'});
+  } catch (error) {
+      console.error('Error inserting task:', error);
+      res.status(500).json({ error: 'Failed to create task.' });
+  }
+});
+
+
+//FONCTION: INPUT INFORMATION DANS LE TABLEAU "VARIATION ACTIVE"
+app.post('/varActive/input', async (req, res) => {
+  const { Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Statut} = req.body;
+  // Validate request body
+  if (!Variable_ID || !Date_creation || !Automate_ID || !Nom_var_auto || !Frequence_ID || !Statut) {
+      return res.status(400).json({ error: 'All fields must be filled correctly.' });
+  }
+
+  try {
+      const conn = await pool.getConnection();
+      // If any overlapping tasks are found, return an error
+      const result = await conn.query(
+        'INSERT INTO frequence (Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Statut) VALUES (?, ?, ?, ?, ?, ?)',
+        [Variable_ID, Date_creation, Automate_ID, Nom_var_auto, Frequence_ID, Statut]
       );
 
       conn.release();
@@ -198,3 +223,38 @@ app.get('/login/check', async (req, res) => {
   }
 });
 
+//FREQU CHECK
+app.get('/frequence/check', async (req, res) => {
+  let conn;
+  try {
+      conn = await pool.getConnection();
+      console.log("Database connection established");
+      const check = await conn.query(
+        "SELECT frequence.ID, frequence.Nom_frequence, frequence.Temps_frequence FROM frequence"
+      );
+      res.json(check);
+  } catch (error) {
+      console.error('Database error:', error.message); // Log the actual error
+      res.status(500).json({ error: error.message });
+  } finally {
+      if (conn) conn.release();
+  }
+});
+
+//AUTOM CHECK
+app.get('/automate/check', async (req, res) => {
+  let conn;
+  try {
+      conn = await pool.getConnection();
+      console.log("Database connection established");
+      const check = await conn.query(
+        "SELECT automate.ID, automate.Nom_automate, automate.IP_automate FROM automate"
+      );
+      res.json(check);
+  } catch (error) {
+      console.error('Database error:', error.message); // Log the actual error
+      res.status(500).json({ error: error.message });
+  } finally {
+      if (conn) conn.release();
+  }
+});

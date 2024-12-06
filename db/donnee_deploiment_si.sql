@@ -92,7 +92,10 @@ CREATE TABLE IF NOT EXISTS `variable_active` (
   CONSTRAINT `FK_variable_active_frequence` FOREIGN KEY (`Frequence_ID`) REFERENCES `frequence` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
 
--- Listage des données de la table donnee_deploiment_si.variable_active : ~0 rows (environ)
+-- Listage des données de la table donnee_deploiment_si. variable_active : ~1 rows (environ)
+INSERT INTO `variable_active` (`ID`, `Variable_ID`, `Date_creation`, `Automate_ID`, `Nom_var_auto`, `Frequence_ID`, `Statut` int(11) DEFAULT NULL) VALUES
+	(1, 1, '06:12:24 16:00:00.000', 1, "test", 1, 1);
+
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
