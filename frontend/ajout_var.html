@@ -65,8 +65,8 @@
               <form>
                 <!-- Nom de la variable -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">Nom variable</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_varName" class="form-label">Nom variable</label>
+                  <input id="case_ajoutVar_varName" type="text" class="form-control">
                 </div>
                 
                 <!-- Liste déroulante 2 -->
@@ -77,10 +77,10 @@
                   </select>
                 </div>
 
-                <!-- Variable automate -->
+                <!-- Mot de l'automate -->
                 <div class="form_case mb-3">
-                  <label for="select_username" class="form-label">Nom variable</label>
-                  <input id="select_username" type="text" class="form-control">
+                  <label for="case_ajoutVar_varMot" class="form-label">Nom variable</label>
+                  <input id="case_ajoutVar_varMot" type="text" class="form-control">
                 </div>
                 
                 <!-- Choix frequence -->
@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Bouton de soumission -->
-                <button type="submit" class="btn btn-primary w-100 mb-3">Ajouter la variable dans le suivi</button>
+                <button id="btn_ajoutVar_varSubmit" class="button">Ajouter la variable dans le suivi</button>
               </form>
             </div>
 
@@ -103,35 +103,17 @@
                   <thead>
                     <tr>
                       <th>Nom variable</th>
-                      <th>StatusVariable_auto</th>
+                      <th>Mot</th>
+                      <th>Frequence</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Exemple 1</td>
-                      <td>Exemple 2</td>
-                      <td>Exemple 3</td>
-                    </tr>
-                    <tr>
-                      <td>Exemple 4</td>
-                      <td>Exemple 5</td>
-                      <td>Exemple 6</td>
-                    </tr>
-                    <tr>
-                      <td>Exemple 7</td>
-                      <td>Exemple 8</td>
-                      <td>Exemple 9</td>
-                    </tr>
-                    <tr>
-                      <td>Exemple 10</td>
-                      <td>Exemple 11</td>
-                      <td>Exemple 12</td>
-                    </tr>
-                    <tr>
-                      <td>Exemple 13</td>
-                      <td>Exemple 14</td>
-                      <td>Exemple 15</td>
+                      <td>Loading...</td>
+                      <td>Loading...</td>
+                      <td>Loading...</td>
+                      <td>Loading...</td>
                     </tr>
                     <!-- Ajoutez d'autres lignes ici selon le besoin -->
                   </tbody>
@@ -194,170 +176,164 @@
     </div>
 
     <script>
-      //FONCTIONS ASSOCIE A LA TABLE
+      // Variables globales
       let currentIndex = 0;
       const rowsPerPage = 2;
-      const tableRows = document.querySelectorAll('#dataTable tbody tr');
-      const totalRows = tableRows.length;
-
-      // Afficher les lignes de la table avec un index de départ
+    
+      // Initialiser le tableau avec les données
+      async function initialize() {
+        await fetchDropdownFreq();
+        await fetchDropdownAutom();
+        await fetchTableVarActive();
+      }
+    
+      // Fonction pour récupérer et afficher les données du tableau
+      async function fetchTableVarActive() {
+        try {
+          const response = await fetch('http://localhost:5001/varActive/check');
+          if (!response.ok) throw new Error('Erreur lors de la récupération des données.');
+          
+          const data = await response.json();
+          const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+          tableBody.innerHTML = '';  // Vider le tableau
+    
+          data.forEach(row => {
+            const newRow = tableBody.insertRow();
+            newRow.insertCell(0).textContent = row.Nom_var_auto;
+            newRow.insertCell(1).textContent = row.Mot_automate;
+            newRow.insertCell(2).textContent = row.Nom_frequence;
+            newRow.insertCell(3).textContent = row.Nom_automate;
+          });
+    
+          // Mise à jour du tableau
+          showRows();
+        } catch (error) {
+          console.error('Erreur:', error);
+        }
+      }
+    
+      // Fonction pour afficher les lignes du tableau avec pagination
       function showRows() {
+        const tableRows = document.querySelectorAll('#dataTable tbody tr');
         tableRows.forEach((row, index) => {
           row.style.display = (index >= currentIndex && index < currentIndex + rowsPerPage) ? '' : 'none';
         });
       }
-
-      // Flèche bas
+    
+      // Flèche bas : affichage des lignes suivantes
       document.getElementById('arrowDown').addEventListener('click', () => {
-        if (currentIndex + rowsPerPage < totalRows) {
+        const tableRows = document.querySelectorAll('#dataTable tbody tr');
+        if (currentIndex + rowsPerPage < tableRows.length) {
           currentIndex += rowsPerPage;
           showRows();
         }
       });
-
-      // Flèche haut
+    
+      // Flèche haut : affichage des lignes précédentes
       document.getElementById('arrowUp').addEventListener('click', () => {
         if (currentIndex - rowsPerPage >= 0) {
           currentIndex -= rowsPerPage;
           showRows();
         }
       });
-
-      // Initialiser la table
-      showRows();
-
-      //RETOUR A LA PAGE "MAIN"
+    
+      // Fonction pour récupérer et remplir le dropdown "Automates"
+      async function fetchDropdownAutom() {
+        try {
+          const response = await fetch('http://localhost:5001/automate/check');
+          const partNumberValue = await response.json();
+          const select = document.getElementById("dropdownAutom");
+          select.innerHTML = ''; // Clear the loading option
+    
+          partNumberValue.forEach(autom => {
+            const option = document.createElement('option');
+            option.value = autom.ID;
+            option.textContent = autom.Nom_automate;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    
+      // Fonction pour récupérer et remplir le dropdown "Fréquences"
+      async function fetchDropdownFreq() {
+        try {
+          const response = await fetch('http://localhost:5001/frequence/check');
+          const partNumberValue = await response.json();
+          const select = document.getElementById("dropdownFreq");
+          select.innerHTML = ''; // Clear the loading option
+    
+          partNumberValue.forEach(freq => {
+            const option = document.createElement('option');
+            option.value = freq.ID;
+            option.textContent = freq.Nom_frequence;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    
+      // Fonction pour formatage de la date
+      function formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, '0');
+        const day = d.getDate().toString().padStart(2, '0');
+        const hours = d.getHours().toString().padStart(2, '0');
+        const minutes = d.getMinutes().toString().padStart(2, '0');
+        const seconds = d.getSeconds().toString().padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+    
+      // Gestion de l'ajout d'une nouvelle variable active
+      document.getElementById('btn_ajoutVar_varSubmit').addEventListener('click', async function(event) {
+        event.preventDefault();
+    
+        const nomVarActive = document.getElementById('case_ajoutVar_varName').value;
+        const motVarActive = document.getElementById('case_ajoutVar_varMot').value;
+        const frequVarActive = document.getElementById('dropdownAutom').value;
+        const automVarActive = document.getElementById('dropdownFreq').value;
+    
+        if (!nomVarActive || !motVarActive || !frequVarActive || !automVarActive) {
+          alert('Veuillez remplir tous les champs.');
+          return;
+        }
+    
+        try {
+          const dateCreation = formatDate(new Date());
+          const response = await fetch('http://localhost:5001/varActive/input', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              Nom_var_auto: nomVarActive,
+              Mot_automate: motVarActive,
+              Automate_ID: automVarActive,
+              Frequence_ID: frequVarActive,
+              Statut: 1,
+              Date_creation: dateCreation
+            })
+          });
+    
+          if (!response.ok) throw new Error('Erreur lors de l\'ajout de la variable.');
+    
+          initialize(); // Réinitialiser les sélections après ajout
+        } catch (error) {
+          console.error('Erreur:', error);
+        }
+      });
+    
+      // Retour à la page principale
       document.getElementById("btn_ajoutVar_return").addEventListener('click', function() {
         const droit_acces = localStorage.getItem('droit_acces');
         location.href = `main.html?droit_acces=${encodeURIComponent(droit_acces)}`;
       });
-
-      /*COMMANDES DE CREATION D'ELEMENTS*/
-      //FREQUENCE
-      document.getElementById('btn_ajoutVar_frequSubmit').addEventListener('click', async function(event) {
-        event.preventDefault(); // Empêche l'envoi classique du formulaire
-
-        const nomFrequence = document.getElementById('case_ajoutVar_frequName').value;
-        const tempsFrequence = document.getElementById('case_ajoutVar_frequTemps').value;
-        console.log("Test Concluant.")
-        // Validation des champs
-        if (!nomFrequence || !tempsFrequence) {
-            alert('Veuillez remplir tous les champs.');
-            return;
-        }
-
-        try {
-            // Envoi de la requête POST au backend
-            const response = await fetch('http://localhost:5001/frequence/input', {  // Assurez-vous d'utiliser "backend" comme adresse dans Docker
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  Nom_frequence: nomFrequence,
-                  Temps_frequence: tempsFrequence
-                })
-            });
-
-            // Vérification de la réponse du serveur
-            if (!response.ok) {
-                throw new Error('Erreur lors de l\'ajout de la fréquence.');
-            }
-
-            const result = await response.json();
-            document.getElementById('responseMessage').innerText = result.message;
-        } catch (error) {
-            console.error('Erreur:', error);
-            document.getElementById('responseMessage').innerText = 'Une erreur est survenue.';
-        }
-        initialize()
-      });
-
-        //AUTOMATE
-        document.getElementById('btn_ajoutVar_AutomSubmit').addEventListener('click', async function(event) {
-        event.preventDefault(); // Empêche l'envoi classique du formulaire
-
-        const nomAutom = document.getElementById('case_ajoutVar_automName').value;
-        const ipAutom = document.getElementById('case_ajoutVar_automIP').value;
-        console.log("Test Concluant.")
-        // Validation des champs
-        if (!nomAutom || !ipAutom) {
-            alert('Veuillez remplir tous les champs.');
-            return;
-        }
-
-        try {
-            // Envoi de la requête POST au backend
-            const response = await fetch('http://localhost:5001/automate/input', {  // Assurez-vous d'utiliser "backend" comme adresse dans Docker
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  Nom_automate: nomAutom,
-                  IP_automate: ipAutom
-                })
-            });
-
-            // Vérification de la réponse du serveur
-            if (!response.ok) {
-                throw new Error('Erreur lors de l\'ajout de la fréquence.');
-            }
-
-            const result = await response.json();
-            document.getElementById('responseMessage').innerText = result.message;
-        } catch (error) {
-            console.error('Erreur:', error);
-            document.getElementById('responseMessage').innerText = 'Une erreur est survenue.';
-        }
-        initialize()
-      });
-
-      async function fetchDropdownAutom() {
-        try {
-            const response = await fetch('http://localhost:5001/automate/check');
-            const partNumberValue = await response.json();
-            const select = document.getElementById("dropdownAutom");
-
-            select.innerHTML = ''; // Clear the loading option
-
-            partNumberValue.forEach(autom => {
-                const option = document.createElement('option');
-                option.value = autom.IP_automate; // Adjust based on your column name
-                option.textContent = autom .IP_automate; // Adjust based on your column name
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } 
-      }
-
-      async function fetchDropdownFreq() {
-        try {
-            const response = await fetch('http://localhost:5001/frequence/check');
-            const partNumberValue = await response.json();
-            const select = document.getElementById("dropdownFreq");
-
-            select.innerHTML = ''; // Clear the loading option
-
-            partNumberValue.forEach(freq => {
-                const option = document.createElement('option');
-                option.value = freq.Temps_frequence; // Adjust based on your column name
-                option.textContent = freq.Temps_frequence; // Adjust based on your column name
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } 
-      }
-
-      function initialize(){
-        fetchDropdownFreq();
-        fetchDropdownAutom();
-      };
-
-      window.onload = initialize()
-
+    
+      // Lancer l'initialisation après le chargement
+      window.onload = initialize;
+    
     </script>
+    
   </body>
 </html>

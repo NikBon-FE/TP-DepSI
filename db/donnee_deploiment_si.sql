@@ -66,11 +66,12 @@ INSERT INTO `login` (`ID`, `Utilisateur`, `Password`, `Droit_int`) VALUES
 -- Listage de la structure de la table donnee_deploiment_si. variable_active
 CREATE TABLE IF NOT EXISTS `variable_active` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Date_creation` DATETIME DEFAULT NULL,
-  `Automate_ID` int(11) DEFAULT NULL,
   `Nom_var_auto` varchar(50) DEFAULT NULL,
+  `Mot_automate` varchar(50) DEFAULT NULL,
+  `Automate_ID` int(11) DEFAULT NULL,
   `Frequence_ID` int(11) DEFAULT NULL,
   `Statut` int(11) DEFAULT NULL,
+  `Date_creation` DATETIME DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_variable_active_automate` (`Automate_ID`),
   KEY `FK_variable_active_frequence` (`Frequence_ID`),
@@ -79,9 +80,9 @@ CREATE TABLE IF NOT EXISTS `variable_active` (
 ) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
 
 -- Listage des données de la table donnee_deploiment_si. variable_active : ~1 rows (environ)
-INSERT INTO `variable_active` (`Date_creation`, `Automate_ID`, `Nom_var_auto`, `Frequence_ID`, `Statut`) 
+INSERT INTO `variable_active` (`Nom_var_auto`,`Mot_automate`, `Automate_ID`, `Frequence_ID`, `Statut`, `Date_creation`) 
 VALUES
-  ('2024-12-08 16:00:00', 1, 'test', 2, 1);  -- Corrected INSERT statement
+  ('test', '503', 1, 2, 1, '2024-12-08 16:00:00');  -- Corrected INSERT statement
 
 -- Listage de la structure de la table donnee_deploiment_si. suivi
 CREATE TABLE IF NOT EXISTS `suivi` (
