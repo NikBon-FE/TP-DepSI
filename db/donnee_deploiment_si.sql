@@ -63,24 +63,10 @@ INSERT INTO `login` (`ID`, `Utilisateur`, `Password`, `Droit_int`) VALUES
 	(1, 'admin', 'admin', 1),
   (2, 'operator', 'operator',0);
   
--- Listage de la structure de la table donnee_deploiment_si. suivi
-CREATE TABLE IF NOT EXISTS `suivi` (
-  `Variable_ID` int(11) NOT NULL,
-  `Date_enregiste` datetime NOT NULL,
-  `Statut_booleen` int(11) NOT NULL DEFAULT 0,
-  `Valeur_variable` int(11) NOT NULL DEFAULT 0,
-  `Frequence` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`Variable_ID`),
-  CONSTRAINT `FK_suivi_variable_active` FOREIGN KEY (`Variable_ID`) REFERENCES `variable_active` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
-
--- Listage des données de la table donnee_deploiment_si.suivi : ~0 rows (environ)
-
 -- Listage de la structure de la table donnee_deploiment_si. variable_active
 CREATE TABLE IF NOT EXISTS `variable_active` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Variable_ID` varchar(50) DEFAULT NULL,
-  `Date_creation` datetime DEFAULT NULL,
+  `Date_creation` DATETIME DEFAULT NULL,
   `Automate_ID` int(11) DEFAULT NULL,
   `Nom_var_auto` varchar(50) DEFAULT NULL,
   `Frequence_ID` int(11) DEFAULT NULL,
@@ -93,9 +79,23 @@ CREATE TABLE IF NOT EXISTS `variable_active` (
 ) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
 
 -- Listage des données de la table donnee_deploiment_si. variable_active : ~1 rows (environ)
-INSERT INTO `variable_active` (`ID`, `Variable_ID`, `Date_creation`, `Automate_ID`, `Nom_var_auto`, `Frequence_ID`, `Statut` int(11) DEFAULT NULL) VALUES
-	(1, 1, '06:12:24 16:00:00.000', 1, "test", 1, 1);
+INSERT INTO `variable_active` (`Date_creation`, `Automate_ID`, `Nom_var_auto`, `Frequence_ID`, `Statut`) 
+VALUES
+  ('2024-12-08 16:00:00', 1, 'test', 2, 1);  -- Corrected INSERT statement
 
+-- Listage de la structure de la table donnee_deploiment_si. suivi
+CREATE TABLE IF NOT EXISTS `suivi` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Associated_variable` int(11) NOT NULL,
+  `Date_enregiste` DATETIME NOT NULL,
+  `Statut_booleen` int(11) NOT NULL DEFAULT 0,
+  `Frequence` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`),
+  KEY `FK_suivi_variable_active` (`Associated_variable`),
+  CONSTRAINT `FK_suivi_variable_active` FOREIGN KEY (`Associated_variable`) REFERENCES `variable_active` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
+
+-- Listage des données de la table donnee_deploiment_si.suivi : ~0 rows (environ)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
