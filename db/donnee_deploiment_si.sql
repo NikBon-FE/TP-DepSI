@@ -90,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `suivi` (
   `Associated_variable` int(11) NOT NULL,
   `Date_enregiste` DATETIME NOT NULL,
   `Statut_booleen` int(11) NOT NULL DEFAULT 0,
-  `Frequence` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ID`),
   KEY `FK_suivi_variable_active` (`Associated_variable`),
   CONSTRAINT `FK_suivi_variable_active` FOREIGN KEY (`Associated_variable`) REFERENCES `variable_active` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION

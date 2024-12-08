@@ -229,15 +229,15 @@ app.get('/varActive/check', async (req, res) => {
       // Requête SQL avec jointures pour récupérer les informations
       const query = `
         SELECT
-          va.ID,
-          va.Nom_var_auto,
-          va.Mot_automate,
-          va.Statut,
+          v.ID,
+          v.Nom_var_auto,
+          v.Mot_automate,
+          v.Statut,
           f.Nom_frequence,
           a.Nom_automate
-        FROM variable_active va
-        JOIN frequence f ON va.Frequence_ID = f.ID
-        JOIN automate a ON va.Automate_ID = a.ID
+        FROM variable_active v
+        JOIN frequence f ON v.Frequence_ID = f.ID
+        JOIN automate a ON v.Automate_ID = a.ID
       `;
       
       const result = await conn.query(query);
@@ -256,38 +256,115 @@ POUR INTERAGIR AVEC L'AUTOMATE 12345*/
 const ModbusRTU = require("modbus-serial");
 const client = new ModbusRTU();
 
-// L'adresse IP et le port de votre périphérique Modbus
-const modbusDeviceIP = "172.16.1.24";
-const modbusPort = 502;
-
-async function connect() {
+// Fonction pour récupérer les informations de l'automate, du port et de la fréquence
+async function getModbusConfig(variableActiveID) {
+  let connection;
   try {
+    // Se connecter à la base de données
+    connection = await pool.getConnection();
+
+    // Récupérer les informations de l'automate, du port et de la fréquence
+    const query = `
+      SELECT 
+        v.Mot_automate, 
+        a.IP_automate, 
+        f.Temps_frequence 
+      FROM 
+        variable_active v
+      JOIN 
+        automate a ON v.Automate_ID = a.ID
+      JOIN 
+        frequence f ON v.Frequence_ID = f.ID
+      WHERE 
+        v.ID = ?;
+    `;
+    
+    // Exécution de la requête
+    const result = await connection.query(query, [variableActiveID]);
+
+    // Retourner le résultat (l'information du périphérique Modbus)
+    return result[0]; // On prend la première ligne de la réponse
+  } catch (err) {
+    console.error("Erreur lors de la récupération des informations Modbus :", err);
+    throw err; // Rethrow l'erreur pour gestion en amont
+  } finally {
+    if (connection) connection.release(); // Libérer la connexion
+  }
+}
+
+// Fonction pour configurer Modbus en fonction des données récupérées
+async function configureModbus(variableActiveID) {
+  try {
+    // Récupérer la configuration Modbus de la base de données
+    const config = await getModbusConfig(variableActiveID);
+    const modbusDeviceIP = config.IP_automate;
+    const modbusPort = parseInt(config.Mot_automate); // Assurez-vous que c'est un nombre
+    const interval = parseInterval(config.Temps_frequence);
+
+    // Connexion au périphérique Modbus
     await client.connectTCP(modbusDeviceIP, { port: modbusPort });
     client.setID(1);  // Définir l'ID du périphérique Modbus
-    console.log("Connexion réussie au périphérique Modbus");
+    console.log(`Connexion réussie au périphérique Modbus à l'adresse ${modbusDeviceIP}:${modbusPort}`);
+
+    // Configurer un intervalle pour lire du périphérique Modbus
+    setInterval(() => readModbus(variableActiveID), interval);  // Utiliser l'intervalle dynamique
   } catch (error) {
-    console.error("Erreur lors de la connexion au périphérique Modbus :", error);
-    setTimeout(connect, 5000);  // Tentative de reconnexion après 5 secondes
+    console.error("Erreur lors de la configuration Modbus :", error);
   }
 }
 
-async function readModbus() {
+// Fonction pour parser l'intervalle de fréquence (format 'HH:MM:SS' vers millisecondes)
+function parseInterval(frequency) {
+  const [hours, minutes, seconds] = frequency.split(':').map(Number);
+  return ((hours * 3600) + (minutes * 60) + seconds) * 1000; // Convertir en millisecondes
+}
+
+// Fonction pour lire les données Modbus et insérer dans le tableau `suivi`
+async function readModbus(variableActiveID) {
   try {
     const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
-    //console.log("Réponse reçue :", response.data[0]);  // Afficher les données
-    if (response.data[0] == true){
-      console.log("Réponse reçue :oui en vrai je...");
-    }
+    const status = response.data[0] ? 1 : 0;  // Convertir true/false en 1/0
+
+    console.log("Réponse Modbus reçue :", response.data[0] ? "true" : "false");
+
+    // Insérer les données dans la table `suivi`
+    await insertSuivi(variableActiveID, status);
+
   } catch (error) {
     console.error("Erreur lors de la lecture du périphérique Modbus :", error);
-    client.close();  // Fermer la connexion en cas d'erreur
-    setTimeout(connect, 5000);  // Reconnexion après 5 secondes en cas d'erreur
+    client.close();
+    setTimeout(() => configureModbus(variableActiveID), 5000);  // Reconnexion après 5 secondes
   }
 }
 
-// Connexion initiale
-connect();
+// Fonction pour insérer les données dans la table `suivi`
+async function insertSuivi(variableActiveID, statut) {
+  let connection;
+  try {
+    connection = await pool.getConnection();
 
-// Configurer un intervalle pour lire du périphérique Modbus
-setInterval(readModbus, 1000);  // Ajustez l'intervalle selon vos besoins
+    // Insérer les données dans la table `suivi`
+    const query = `
+      INSERT INTO suivi (Associated_variable, Date_enregiste, Statut_booleen)
+      VALUES (?, NOW(), ?);
+    `;
+    
+    // Exécution de la requête d'insertion
+    await connection.query(query, [variableActiveID, statut]);
 
+    console.log("Données insérées dans la table 'suivi' avec succès.");
+
+  } catch (err) {
+    console.error("Erreur lors de l'insertion dans la table 'suivi' :", err);
+  } finally {
+    if (connection) connection.release(); // Libérer la connexion
+  }
+}
+
+// Exemple d'appel pour initialiser la configuration avec l'ID d'une variable active
+configureModbus(1);  // ID de la variable active à passer ici
+
+// Fermer la connexion à la base de données après utilisation
+process.on('exit', () => {
+  pool.end(); // Fermer le pool de connexions MariaDB
+});
