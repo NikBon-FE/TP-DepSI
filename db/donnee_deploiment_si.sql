@@ -18,7 +18,6 @@
 -- Listage de la structure de la base pour donnee_deploiment_si
 CREATE DATABASE IF NOT EXISTS `donnee_deploiment_si` /*!40100 DEFAULT CHARACTER SET armscii8 COLLATE armscii8_bin */;
 USE `donnee_deploiment_si`;
-
 -- Listage de la structure de la table donnee_deploiment_si. automate
 CREATE TABLE IF NOT EXISTS `automate` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,7 +81,9 @@ CREATE TABLE IF NOT EXISTS `variable_active` (
 -- Listage des données de la table donnee_deploiment_si. variable_active : ~1 rows (environ)
 INSERT INTO `variable_active` (`Nom_var_auto`,`Mot_automate`, `Automate_ID`, `Frequence_ID`, `Statut`, `Date_creation`) 
 VALUES
-  ('test', '503', 1, 2, 1, '2024-12-08 16:00:00');  -- Corrected INSERT statement
+  ('test', '503', 1, 1, 1, '2024-12-08 15:00:00'),
+  ('test1', '503', 2, 2, 2, '2024-12-08 16:00:00'),
+  ('test2', '503', 3, 3, 3, '2024-12-08 17:00:00');
 
 -- Listage de la structure de la table donnee_deploiment_si. suivi
 CREATE TABLE IF NOT EXISTS `suivi` (
@@ -95,7 +96,12 @@ CREATE TABLE IF NOT EXISTS `suivi` (
   CONSTRAINT `FK_suivi_variable_active` FOREIGN KEY (`Associated_variable`) REFERENCES `variable_active` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
 
--- Listage des données de la table donnee_deploiment_si.suivi : ~0 rows (environ)
+-- Listage des données de la table donnee_deploiment_si.suivi : ~2 rows (environ)
+INSERT INTO `suivi` (`Associated_variable`, `Date_enregiste`, `Statut_booleen`) 
+VALUES
+  (1, '2024-12-08 15:00:00', 1),  -- Corrected INSERT statement
+  (2, '2024-12-08 16:00:00', 1),
+  (3, '2024-12-08 17:00:00', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

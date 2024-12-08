@@ -201,23 +201,7 @@ app.get('/frequence/check', async (req, res) => {
   }
 });
 
-//AUTOM CHECK
-app.get('/automate/check', async (req, res) => {
-  let conn;
-  try {
-      conn = await pool.getConnection();
-      console.log("Database connection established");
-      const check = await conn.query(
-        "SELECT automate.ID, automate.Nom_automate, automate.IP_automate FROM automate"
-      );
-      res.json(check);
-  } catch (error) {
-      console.error('Database error:', error.message); // Log the actual error
-      res.status(500).json({ error: error.message });
-  } finally {
-      if (conn) conn.release();
-  }
-});
+
 
 //VARACT CHECK
 app.get('/varActive/check', async (req, res) => {
@@ -250,6 +234,31 @@ app.get('/varActive/check', async (req, res) => {
   }
 });
 
+// SUIVI CHECK avec pagination
+app.get('/suivi/check', async (req, res) => {
+  try {
+    // Effectuer la requête SQL avec jointure pour récupérer 'Nom_var_auto' et les autres champs
+    const rows = await pool.query(`
+      SELECT 
+        suivi.ID,
+        variable_active.Nom_var_auto,  -- Nous récupérons 'Nom_var_auto' à la place de 'Associated_variable'
+        suivi.Date_enregiste,
+        suivi.Statut_booleen
+      FROM 
+        suivi
+      JOIN 
+        variable_active ON suivi.Associated_variable = variable_active.ID;
+    `);
+
+    // Renvoyer les résultats sous forme de JSON
+    res.json({ data: rows });
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send('Database error');
+  }
+});
+
+
 /*FONCTION D'ECHANGE D'INFORMATION
 POUR INTERAGIR AVEC L'AUTOMATE 12345*/
 
@@ -269,14 +278,10 @@ async function getModbusConfig(variableActiveID) {
         v.Mot_automate, 
         a.IP_automate, 
         f.Temps_frequence 
-      FROM 
-        variable_active v
-      JOIN 
-        automate a ON v.Automate_ID = a.ID
-      JOIN 
-        frequence f ON v.Frequence_ID = f.ID
-      WHERE 
-        v.ID = ?;
+      FROM variable_active v
+      JOIN automate a ON v.Automate_ID = a.ID
+      JOIN frequence f ON v.Frequence_ID = f.ID
+      WHERE v.ID = ?;
     `;
     
     // Exécution de la requête
@@ -304,7 +309,7 @@ async function configureModbus(variableActiveID) {
     // Connexion au périphérique Modbus
     await client.connectTCP(modbusDeviceIP, { port: modbusPort });
     client.setID(1);  // Définir l'ID du périphérique Modbus
-    console.log(`Connexion réussie au périphérique Modbus à l'adresse ${modbusDeviceIP}:${modbusPort}`);
+    //console.log(`Connexion réussie au périphérique Modbus à l'adresse ${modbusDeviceIP}:${modbusPort}`);
 
     // Configurer un intervalle pour lire du périphérique Modbus
     setInterval(() => readModbus(variableActiveID), interval);  // Utiliser l'intervalle dynamique
@@ -325,7 +330,7 @@ async function readModbus(variableActiveID) {
     const response = await client.readCoils(503, 1);  // Lire 1 coil à l'adresse 503
     const status = response.data[0] ? 1 : 0;  // Convertir true/false en 1/0
 
-    console.log("Réponse Modbus reçue :", response.data[0] ? "true" : "false");
+    // console.log("Réponse Modbus reçue :", response.data[0] ? "true" : "false");
 
     // Insérer les données dans la table `suivi`
     await insertSuivi(variableActiveID, status);
@@ -352,7 +357,7 @@ async function insertSuivi(variableActiveID, statut) {
     // Exécution de la requête d'insertion
     await connection.query(query, [variableActiveID, statut]);
 
-    console.log("Données insérées dans la table 'suivi' avec succès.");
+    //console.log("Données insérées dans la table 'suivi' avec succès.");
 
   } catch (err) {
     console.error("Erreur lors de l'insertion dans la table 'suivi' :", err);

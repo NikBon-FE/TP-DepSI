@@ -49,36 +49,33 @@
         
         <!-- Colonne gauche - 8/12 avec le tableau -->
         <div class="col-8 d-flex align-items-center justify-content-center">
-          <div id="tableContainer" class="w-100">
+          <div id="suiviTable" class="w-100">
             <!-- Tableau à 5 colonnes -->
             <table>
               <thead>
                 <tr>
                   <th>Nom variable</th>
                   <th>N° req</th>
-                  <th>Date</th>
-                  <th>Automate</th>
+                  <th>Date de Saisie</th>
                   <th>Valeur</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Exemple 1</td>
-                  <td>Exemple 2</td>
-                  <td>Exemple 3</td>
-                  <td>Exemple 4</td>
-                  <td>Exemple 5</td>
-                </tr>
-                <tr>
-                  <td>Exemple 6</td>
-                  <td>Exemple 7</td>
-                  <td>Exemple 8</td>
-                  <td>Exemple 9</td>
-                  <td>Exemple 10</td>
+                  <td>Loading...</td>
+                  <td>Loading...</td>
+                  <td>Loading...</td>
+                  <td>Loading...</td>
                 </tr>
                 <!-- Ajoutez d'autres lignes ici selon le besoin -->
               </tbody>
             </table>
+
+            <div>
+              <button id="prevPageBtn" onclick="changePage(-1)">Précédent</button>
+              <span id="pageNumber">Page 1</span>
+              <button id="nextPageBtn" onclick="changePage(1)">Suivant</button>
+            </div>
           </div>
         </div>
         
@@ -89,64 +86,54 @@
             <form>
               <!-- Liste déroulante 1 -->
               <div class="mb-3">
-                <label for="dropdown1" class="form-label">Choisissez la variable 1</label>
-                <select id="dropdown1" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
+                <label for="dropdownVar" class="form-label">Choisissez une variable</label>
+                <select id="dropdownVar" class="form-select" disabled>
+                  <option value="option1">Choisissez une variable</option>
                 </select>
               </div>
               
-              <!-- Liste déroulante 2 -->
+              <!-- TEMPS DEBUT-->
               <div class="mb-3">
-                <label for="dropdown2" class="form-label">Choisissez la variable 2</label>
-                <select id="dropdown2" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
+                <label for="datetotal_exportCsv_Debut" class="form-label">Choisir un temps de début</label>
+                <div class="input-group">
+                  <span class="input-group-date"></span>
+                  <input id="date_exportCsv_Debut" type="date" class="form-control" disabled>
+                  <span class="input-group-test"></span>
+                  <span class="input-group-time"></span>
+                  <input id="time_exportCsv_Debut" type="time" class="form-control" disabled>
+                </div>
               </div>
               
-              <!-- Liste déroulante 3 -->
-              <div class="mb-3">
-                <label for="dropdown3" class="form-label">Choisissez la variable 3</label>
-                <select id="dropdown3" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
+              <!-- TEMPS FIN -->
+              <label for="date_exportCsv_Fin" class="form-label">Choisir un temps de fin</label>
+              <div class="input-group">
+                <span class="input-group-date"></span>
+                <input id="date_exportCsv_Fin" type="date" class="form-control" disabled>
+                <span class="input-group-test"></span>
+                <span class="input-group-time"></span>
+                <input id="time_exportCsv_Fin" type="time" class="form-control" disabled>
               </div>
-
-              <!-- Liste déroulante 4 -->
-              <div class="mb-3">
-                <label for="dropdown4" class="form-label">Choisissez la variable 4</label>
-                <select id="dropdown4" class="form-select">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-
+              
               <!-- Cases à cocher -->
               <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox1">
-                <label class="form-check-label" for="checkbox1">
-                  Temps start
-                </label>
+                <input class="form-check-input" type="checkbox" id="check_exportCsv_Var">
+                <label class="form-check-label" for="check_exportCsv_Var">Choix Variable</label>
               </div>
               <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="checkbox2">
-                <label class="form-check-label" for="checkbox2">
-                  Temps end
-                </label>
+                <input id="check_exportCsv_Debut" class="form-check-input" type="checkbox">
+                <label for="check_exportCsv_Debut" class="form-check-label">Temps start</label>
               </div>
-
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="check_exportCsv_Fin">
+                <label class="form-check-label" for="check_exportCsv_Fin">Temps end</label>
+              </div>
+              
               <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100 mb-3">Afficher tableau</button>
+              <button type="button" id="btn_exportCsv_modifTable" class="button" disabled>Modifier tableau</button>
               <!-- Bouton de soumission -->
-              <button type="submit" class="btn btn-primary w-100">Export_to_csv</button>
-
+              <button type="button" id="btn_exportCsv_Debut" class="btn btn-primary w-100">Export_to_csv</button>
             </form>
+            
           </div>
 
           <!-- Nouveaux boutons de redirection en dehors du formulaire -->
@@ -156,14 +143,150 @@
           </div>
           <a id="btn_exportCsv" class="button"></a>
         </div>
-        
+        <button id="btn_graphe_return" type="button"></button>
       </div>
     </div>
   </body>
   <script>
-         document.getElementById("btn_graphe_return").addEventListener('click', function() {
-        const droit_acces = localStorage.getItem('droit_acces');
-        location.href = `main.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+    document.getElementById("btn_graphe_return").addEventListener('click', function() {
+      const droit_acces = localStorage.getItem('droit_acces');
+      location.href = `main.html?droit_acces=${encodeURIComponent(droit_acces)}`;
+    });
+
+    let currentPage = 1; // Page actuelle
+    const rowsPerPage = 10; // Nombre de lignes par page
+    let allData = []; // Toutes les données
+
+    // Charger les données du serveur
+    async function loadTableData() {
+      try {
+        const response = await fetch('http://localhost:5001/suivi/check');
+        const result = await response.json();
+        allData = result.data;
+        renderTable();
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    }
+
+    // Afficher les données du tableau
+    function renderTable() {
+      const pageData = allData; // Filtrage effectué lors du clic sur "Modifier tableau"
+      const tableBody = document.querySelector("#suiviTable tbody");
+      tableBody.innerHTML = ''; // Vider le tableau
+
+      pageData.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.Nom_var_auto}</td>
+          <td>${row.ID}</td>
+          <td>${row.Date_enregiste}</td>
+          <td>${row.Statut_booleen}</td>
+        `;
+        tableBody.appendChild(tr);
       });
-  </script>
+
+      document.getElementById('pageNumber').textContent = `Page 1`;
+      document.getElementById('prevPageBtn').disabled = document.getElementById('nextPageBtn').disabled = true;
+    }
+
+    // Gérer les changements de page
+    function changePage(delta) {
+      const newPage = currentPage + delta;
+      if (newPage >= 1 && newPage <= Math.ceil(allData.length / rowsPerPage)) {
+        currentPage = newPage;
+        renderTable();
+      }
+    }
+
+    // Fonction pour activer/désactiver les éléments du formulaire en fonction des cases à cocher
+    const toggleInputs = () => {
+      const checkboxVar = document.getElementById('check_exportCsv_Var');
+      const dropdownVar = document.getElementById('dropdownVar');
+      const checkboxDebut = document.getElementById('check_exportCsv_Debut');
+      const checkboxFin = document.getElementById('check_exportCsv_Fin');
+      const dateDebut = document.getElementById('date_exportCsv_Debut');
+      const timeDebut = document.getElementById('time_exportCsv_Debut');
+      const newEndDate = document.getElementById('new_end_date');
+      const newEndTime = document.getElementById('new_end_time');
+      const btnModifierTable = document.getElementById('btn_exportCsv_modifTable');
+      
+      dropdownVar.disabled = !checkboxVar.checked;
+      dateDebut.disabled = !checkboxDebut.checked;
+      timeDebut.disabled = !checkboxDebut.checked;
+      newEndDate.disabled = !checkboxFin.checked;
+      newEndTime.disabled = !checkboxFin.checked;
+      btnModifierTable.disabled = !(checkboxDebut.checked || checkboxFin.checked || checkboxVar.checked);
+    };
+
+    // Charger les valeurs pour la liste déroulante de variables
+    const loadDropdownValues = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/varActive/check');
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const data = await response.json();
+        const dropdownVar = document.getElementById('dropdownVar');
+        data.forEach(variable => {
+          const option = document.createElement('option');
+          option.value = variable.Nom_var_auto;
+          option.textContent = variable.Nom_var_auto;
+          dropdownVar.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading dropdown values:', error);
+      }
+    };
+
+    // Appliquer les filtres au tableau lors de la modification
+    const applyFilters = () => {
+      const checkboxVar = document.getElementById('check_exportCsv_Var');
+      const dropdownVar = document.getElementById('dropdownVar');
+      const checkboxDebut = document.getElementById('check_exportCsv_Debut');
+      const checkboxFin = document.getElementById('check_exportCsv_Fin');
+      const dateDebut = document.getElementById('date_exportCsv_Debut');
+      const timeDebut = document.getElementById('time_exportCsv_Debut');
+      const newEndDate = document.getElementById('new_end_date');
+      const newEndTime = document.getElementById('new_end_time');
+      
+      let filteredData = allData;
+
+      // Filtrer par variable sélectionnée
+      if (checkboxVar.checked && dropdownVar.value !== "option1") {
+        filteredData = filteredData.filter(row => row.Nom_var_auto === dropdownVar.value);
+      }
+
+      // Filtrer par date et heure de début
+      if (checkboxDebut.checked) {
+        const startDateTime = new Date(`${dateDebut.value}T${timeDebut.value}`);
+        filteredData = filteredData.filter(row => new Date(row.Date_enregiste) >= startDateTime);
+      }
+
+      // Filtrer par date et heure de fin
+      if (checkboxFin.checked) {
+        const endDateTime = new Date(`${newEndDate.value}T${newEndTime.value}`);
+        filteredData = filteredData.filter(row => new Date(row.Date_enregiste) <= endDateTime);
+      }
+
+      // Mettre à jour le tableau avec les données filtrées
+      allData = filteredData;
+      renderTable();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialiser l'état des cases à cocher
+      toggleInputs();
+      // Ajouter des écouteurs d'événements pour chaque case à cocher
+      ['check_exportCsv_Debut', 'check_exportCsv_Fin', 'check_exportCsv_Var'].forEach(id => {
+        document.getElementById(id).addEventListener('change', toggleInputs);
+      });
+      // Charger les options de la liste déroulante
+      loadDropdownValues();
+
+      // Ajouter l'événement sur le bouton de modification du tableau
+      document.getElementById('btn_exportCsv_modifTable').addEventListener('click', applyFilters);
+    });
+
+    // Charger les données lors du chargement de la page
+    window.onload = loadTableData();
+</script>
 </html>
